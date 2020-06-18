@@ -20,4 +20,5 @@ api = Api(app)
 api.add_resource(Farmers, '/farmers')
 
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=True)  # important to mention debug=True
+    # important to mention debug=True
+    app.run(port=3500, debug=True, use_reloader=True)
