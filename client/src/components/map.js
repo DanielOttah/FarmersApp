@@ -5,6 +5,7 @@ class OurMap extends React.Component {
 
     render() {
         let src = `https://maps.google.com/maps?q=calgary&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+        // let src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyDD1Q2634NBdkrEv3zFY-aOOxKe0pgJHIU&q=Calgary,+AB`;  
 
         // return (
         //     <div >
