@@ -1,13 +1,6 @@
 import React from "react";
 
-class List extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        }
-    }
-
+export class FarmList extends React.Component {
     render() {
         const listItem = this.props.allfarmers.map((items, index) =>
             <FarmersList key={index.toString()} value={items} />)
@@ -17,21 +10,20 @@ class List extends React.Component {
                 <fieldset style={{ marginTop: "5px" }}>
                     <legend> <b>Products</b></legend>
                     <input type='search' placeholder="Search farms products..." value={this.props.searchQuery} onChange={this.props.search} />
-                    <div>
-                        <table>
-                            <tbody>
-                                {listItem}
-                            </tbody>
-                        </table>
-                    </div>
+
                 </fieldset>
+                <div>
+                    <table>
+                        <tbody>
+                            {listItem}
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         )
     }
 }
-
-export default List;
-
 function FarmersList(props) {
     return <tr><td>{props.value.name}</td>
     </tr>
