@@ -1,8 +1,8 @@
-from flask_restful import Resource, reqparse
+from flask_restful import Resource
 import sqlite3
 # from flask import jsonify
 
-table = {}
+farmers = {}
 
 
 class Farmers(Resource):
@@ -13,11 +13,11 @@ class Farmers(Resource):
         rowCount = 0
         for row in cursor.execute("SELECT * FROM farmers"):
             rowCount += 1
-            table[rowCount] = buildDict(row).json()
+            farmers[rowCount] = buildDict(row).json()
         connection.commit()
         connection.close()
         # return jsonify({"data": table})
-        return table
+        return farmers
 
 
 class buildDict():
