@@ -3,6 +3,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
 from farmers import Farmers
+from products import Food
 
 
 app = Flask(__name__)
@@ -12,12 +13,13 @@ app.secret_key = 'dany'
 api = Api(app)
 
 
-# @app.route("/")
-# def helloWorld():
-#     return Farmers.get()
+@app.route("/")
+def helloWorld():
+    return "Welcome to Farmers' Alley App... Enjoy!"
 
 
 api.add_resource(Farmers, '/farmers')
+api.add_resource(Food, '/food')
 
 if __name__ == '__main__':
     # important to mention debug=True
