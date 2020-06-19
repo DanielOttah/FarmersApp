@@ -2,8 +2,8 @@ import React from "react";
 
 export class FarmList extends React.Component {
     render() {
-        const listItem = this.props.allfarmers.map((items, index) =>
-            <FarmersList key={index.toString()} value={items} />)
+        const listItem = this.props.allProducts.map((items, index) =>
+            <ProductList key={index.toString()} value={items} />)
 
         return (
             <div className="List">
@@ -24,7 +24,7 @@ export class FarmList extends React.Component {
         )
     }
 }
-function FarmersList(props) {
+function ProductList(props) {
     return <tr><td>{props.value.name}</td>
     </tr>
 

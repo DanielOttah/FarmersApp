@@ -24,7 +24,6 @@ export class MapContainer extends Component {
 
 
     }
-    //  onClick={this.onMarkerClick()} name={pin.name}
 
     onMarkerClick = (props, marker, e) => {
         this.setState({
