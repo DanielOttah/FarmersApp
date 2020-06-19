@@ -14,13 +14,6 @@
     overflow-y: auto;
 }
 
-.Gmap_canvas {
-    overflow: hidden;
-    background: none !important;
-    height: 500px;
-    width: 100%;
-}
-
 .Mapouter {
     position: relative;
     text-align: right;
@@ -34,13 +27,6 @@
     width: 100%;
 }
 
-.result {
-    margin-top: 5px;
-    background-color: rgb(217, 249, 250);
-    /* width: 100%; */
-    border: 0.5px black solid;
-}
-
 .container {
     margin: auto;
     height: 100vh;
@@ -48,11 +34,16 @@
     justify-content: center;
 }
 
+.result {
+    height: 40vh;
+    overflow: auto;
+    border: 0.5px black solid;
+}
+
 table {
     margin: 5px 5px 5px 5px;
     border-collapse: collapse;
-    width: 100%;
-    /* height: 100px */
+    width: 98%;
 }
 
 td,

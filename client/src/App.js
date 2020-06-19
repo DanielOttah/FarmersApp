@@ -13,6 +13,7 @@ class App extends React.Component {
       productList: [],
       searchQuery: "",
     }
+    this.trial = []
   }
   async componentDidMount() {
     let url = 'http://127.0.0.1:3500/farmers';
@@ -23,8 +24,13 @@ class App extends React.Component {
       this.state.productList.push(allProductList[x]);
     }
     this.setState({
-      productList: this.state.productList,
+      productList: this.state.productList
     })
+
+    //Trial
+    for (let x = 0; x < 31; x++) {
+      this.trial.push(this.state.productList[x]);
+    }
   }
 
   handleProductSearch = (e) => {
@@ -43,7 +49,8 @@ class App extends React.Component {
         <NavBar />
         <div className="container">
           <div className="Main">
-            <FarmMap allfarmers={(filteredProducts) ? filteredProducts : this.state.productList} />
+            {/* <FarmMap allfarmers={(filteredProducts) ? filteredProducts : this.state.trial} /> */}
+            <FarmMap allfarmers={this.trial} />
             <div className="">
               <FarmList search={this.handleProductSearch} searchQuery={this.state.searchQuery}
                 allfarmers={filteredProducts} />
