@@ -12,6 +12,23 @@ export class MapContainer extends Component {
         selectedPlace: {}          //Shows the infoWindow to the selected place upon a marker
     };
 
+    displayMarkers = () => {
+        return this.props.markers.map((pin, index) => {
+            return <Marker key={index} id={index}
+                position={{ lat: pin.latitude, lng: pin.longitude }}
+                onClick={this.onMarkerClick} name={pin.name} />
+        })
+
+        //     <InfoWindow
+        //     marker={this.state.activeMarker}
+        //     visible={this.state.showingInfoWindow}
+        //     onClose={this.onClose}
+        // >
+        //     <div>
+        //         <h4>{this.state.selectedPlace.name}</h4>
+        //     </div>/>
+    }
+
     onMarkerClick = (props, marker, e) =>
         this.setState({
             selectedPlace: props,
@@ -32,23 +49,12 @@ export class MapContainer extends Component {
         return (
             <Map
                 google={this.props.google}
-                zoom={8}
+                zoom={6}
                 style={mapStyles}
-                initialCenter={{ lat: 51.2927, lng: -114.0134 }}
+                initialCenter={{ lat: 53.5461, lng: -113.4938 }}
             >
-                <Marker
-                    onClick={this.onMarkerClick}
-                    name={'Airdrie'}
-                />
-                <InfoWindow
-                    marker={this.state.activeMarker}
-                    visible={this.state.showingInfoWindow}
-                    onClose={this.onClose}
-                >
-                    <div>
-                        <h4>{this.state.selectedPlace.name}</h4>
-                    </div>
-                </InfoWindow>
+                {this.displayMarkers()}
+
             </Map>
         );
     }

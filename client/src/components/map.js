@@ -19,7 +19,7 @@ class FarmMap extends React.Component {
 
         return (
             <div className="Mapouter">
-                <GoogleApiWrapper filteredProducts={this.props.allfarmers} />
+                <GoogleApiWrapper markers={this.props.allfarmers} />
             </div>
         )
 

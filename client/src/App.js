@@ -43,7 +43,7 @@ class App extends React.Component {
         <NavBar />
         <div className="container">
           <div className="Main">
-            <FarmMap allfarmers={filteredProducts} />
+            <FarmMap allfarmers={(filteredProducts) ? filteredProducts : this.state.productList} />
             <div className="">
               <FarmList search={this.handleProductSearch} searchQuery={this.state.searchQuery}
                 allfarmers={filteredProducts} />
