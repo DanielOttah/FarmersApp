@@ -26,8 +26,8 @@ class buildDict():
         self.name = row[1]
         self.address = row[2]
         self.contact = row[3]
-        self.latitude = row[4]
-        self.longitude = row[5]
+        self.latitude = row[5]
+        self.longitude = row[4]
 
     def json(self):
         return {'name': self.name,
