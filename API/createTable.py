@@ -10,6 +10,7 @@ cursor = connection.cursor()
 # Create farmer table
 create_table = "CREATE TABLE IF NOT EXISTS farmers (id INTEGER PRIMARY KEY, name text,address text,contact text, lat int, long int)"
 cursor.execute(create_table)
+
 # Insert values into table
 insert = "INSERT into farmers VALUES(NULL,?,?,?,?,?)"
 for row in wb['farmersmarkets'].iter_rows(min_row=2, max_row=wb['farmersmarkets'].max_row, values_only=True):
