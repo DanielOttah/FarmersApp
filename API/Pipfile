@@ -10,6 +10,7 @@ openpyxl = "*"
 flask = "*"
 flask-cors = "*"
 flask-restful = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.8"

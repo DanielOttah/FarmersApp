@@ -14,7 +14,8 @@ cursor.execute(create_table)
 # Insert values into table
 insert = "INSERT into farmers VALUES(NULL,?,?,?,?,?)"
 for row in wb['farmersmarkets'].iter_rows(min_row=2, max_row=wb['farmersmarkets'].max_row, values_only=True):
-    cursor.execute(insert, (row[3], row[6], row[12], row[15], row[16]))
+    cursor.execute(
+        insert, (row[3], f"{row[5]} - {row[6]}", row[12], row[15], row[16]))
 
 # Create product table
 create_table = "CREATE TABLE IF NOT EXISTS foodDetails (id INTEGER PRIMARY KEY,  name text,botname text,othernames text, imageurl text)"
@@ -22,7 +23,7 @@ cursor.execute(create_table)
 # Insert values into table
 insert = "INSERT into foodDetails VALUES(NULL,?,?,?,?)"
 for row in wbFood['food'].iter_rows(min_row=2, max_row=wbFood['food'].max_row, values_only=True):
-    cursor.execute(insert, (row[1], row[2], row[3], row[4]))
+    cursor.execute(insert, (row[0], row[1], row[2], row[3]))
 
 
 # def viewTable():
