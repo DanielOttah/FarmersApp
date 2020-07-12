@@ -13,7 +13,14 @@ class App1 extends React.Component {
     this.state = {
       farmersList: [],
       productList: [],
-      searchQuery: ""
+      searchQuery: "",
+      selectFarmerOption: "",
+      show: false,
+      optAddFarmer: "none",
+      optDelFarmer: "none",
+      addFarmerDetails: {},
+      delFarmer: ""
+
     }
   }
   async componentDidMount() {
@@ -70,12 +77,52 @@ class App1 extends React.Component {
     })
 
   }
+
+  selectFarmerOption = (e) => {
+    this.setState({
+      selectFarmerOption: e.target.value
+    })
+  }
+
+  showModal = () => {
+    if (this.state.selectFarmerOption === "AddFarmer") {
+      this.setState({
+        optAddFarmer: "block",
+        optDelFarmer: "none"
+      });
+      this.setState({ show: true })
+    }
+    else if (this.state.selectFarmerOption === "DeleteFarmer") {
+      this.setState({
+        optAddFarmer: "none",
+        optDelFarmer: "block"
+      });
+      this.setState({ show: true })
+    }
+
+  }
+  hideModal = () => {
+    this.setState({ show: false });
+  }
+
+  handleAddFarmerDetails = (obj) => {
+    let newFarm = { ...obj };
+    this.setState({ addFarmerDetails: { ...this.state.addFarmerDetails, ...newFarm } })
+  }
+
+  handleDeleteFarmer = (e) => {
+    this.setState({ delFarmer: e.target.value })
+  }
+  handleUpdate = () => {
+
+  }
   // filterFarmers = () => {
   //   const filteredFarmers = this.state.farmersList.filter(items => {
   //     return items.name.toLowerCase().includes(this.state.searchQuery.toLowerCase());
   //   })
-  // }
+  // }    
   render() {
+
     const filteredFarmers = this.state.farmersList.filter(items => {
       return items.name.toLowerCase().includes(this.state.searchQuery.toLowerCase());
     })
@@ -90,7 +137,7 @@ class App1 extends React.Component {
           <div className="container">
             <div className="Main">
               <FarmMap allfarmers={(filteredFarmers) ? filteredFarmers : this.state.farmersList} />
-              <div className="">
+              <div>
                 <FarmList search={this.handleProductSearch} searchQuery={this.state.searchQuery}
                   allProducts={filteredProducts} />
               </div>
@@ -101,6 +148,28 @@ class App1 extends React.Component {
           </div>
         </div>
         <div id='_idAllFarmers' style={{ display: "none" }}>
+          <select value={this.state.selectFarmerOption} onChange={this.selectFarmerOption}>
+            <option>--Select--</option>
+            <option value="AddFarmer"> Add Farmer</option>
+            <option value="DeleteFarmer">Delete Farmer</option>
+          </select>
+          <button onClick={this.showModal}>Complete</button>
+          <Modal show={this.state.show} handleClose={this.hideModal} handleUpdate={this.handleUpdate}>
+            <div style={{ display: this.state.optAddFarmer }}>
+              <h3 style={{ display: "flex", justifyContent: "center", padding: "5px" }}>Add Farmer</h3>
+              <div style={{ display: "grid", gridTemplateColumns: "15% 40% 15% 15% 15%" }}>
+                <input style={{ margin: "3px" }} type="text" onChange={(e) => this.handleAddFarmerDetails({ name: e.target.value })} placeholder="Enter Farm Name" />
+                <input style={{ margin: "3px" }} type="text" onChange={(e) => this.handleAddFarmerDetails({ address: e.target.value })} placeholder="Enter Farm Address" />
+                <input style={{ margin: "3px" }} type="text" onChange={(e) => this.handleAddFarmerDetails({ contact: e.target.value })} placeholder="Enter Farm Contact" />
+                <input style={{ margin: "3px" }} type="text" onChange={(e) => this.handleAddFarmerDetails({ lat: e.target.value })} placeholder="Enter Farm Latitude" />
+                <input style={{ margin: "3px" }} type="text" onChange={(e) => this.handleAddFarmerDetails({ long: e.target.value })} placeholder="Enter Farm Longitude" />
+              </div>
+            </div>
+            <div style={{ display: this.state.optDelFarmer }}>
+              <h3 style={{ display: "flex", justifyContent: "center", padding: "5px" }}>Delete Farmer</h3>
+              <input type="text" onChange={this.handleDeleteFarmer} value={this.state.delFarmer} placeholder="Enter Farm id <S/N>" />
+            </div>
+          </Modal>
           <AllFarmers allFarmers={this.state.farmersList} />
         </div>
         <div id='_idAllProducts' style={{ display: "none" }}>
@@ -113,3 +182,19 @@ class App1 extends React.Component {
 
 export default App1;
 
+const Modal = ({ handleClose, handleUpdate, show, children }) => {
+  const showHideClassName = show ? "modal display-block" : "modal display-none";
+
+  return (
+    <div className={showHideClassName}>
+
+      <section className="modal-main">
+        {children}
+        <button style={{ margin: "3px", padding: "5px" }} onClick={handleUpdate}>Update</button>
+        <button style={{ margin: "3px", padding: "5px" }} onClick={handleClose}>Close</button>
+      </section>
+    </div>
+
+  );
+};
+//
