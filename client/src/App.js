@@ -6,8 +6,11 @@ import NavBar from './components/Navbar.js';
 import SearchResult from './components/SearchResult.js';
 import AllFarmers from './components/AllFarmers';
 import AllProducts from './components/AllProducts';
+import Settings from './components/settings.js';
+import { ThemeContext } from './components/ThemeContext.js';
 
-class App1 extends React.Component {
+class App extends React.Component {
+  static contextType = ThemeContext;
   constructor(props) {
     super(props)
     this.state = {
@@ -17,9 +20,9 @@ class App1 extends React.Component {
       show: false,
       addFarmerDetails: {},
       addfarmerNotice: "Add Farmer"
-
     }
   }
+
 
   async postData(link = '', data = {}) {
 
@@ -81,9 +84,10 @@ class App1 extends React.Component {
     })
   }
   componentDidMount() {
-    // this.get_all_Products_From_Flask_API();
-    this.get_all_Products_From_Node_API();
+    this.get_all_Products_From_Flask_API();
+
   }
+
   handleSelectMenu = (e) => {
     if (e.target.id === 'idHome') {
       const home = document.getElementById("_idHome")
@@ -109,6 +113,14 @@ class App1 extends React.Component {
       allProduct.style.display = "none"
       allfarmers.style.display = "block"
     }
+    else if (e.target.id === 'idLanding') {
+      const home = document.getElementById("_idHome")
+      const allProduct = document.getElementById("_idAllProducts")
+      const allfarmers = document.getElementById("_idAllFarmers")
+      home.style.display = "none"
+      allProduct.style.display = "none"
+      allfarmers.style.display = "none"
+    }
   }
 
   handleProductSearch = (e) => {
@@ -127,12 +139,15 @@ class App1 extends React.Component {
 
   }
 
-  handleAddFarmer = () => {
+  handleAddFarmer = async () => {
 
-    this.postData('http://127.0.0.1:4000/addfarmer', this.state.addFarmerDetails)
-    this.setState({ addfarmerNotice: `${this.state.addFarmerDetails.name} added` })
+    // this.postData("http://127.0.0.1:4000/addfarmer", this.state.addFarmerDetails) 
+    // this.get_all_Products_From_Node_API();
 
-    this.get_all_Products_From_Node_API();
+    let req = await this.postData("http://127.0.0.1:3500/addfarmer", this.state.addFarmerDetails)
+    // this.get_all_Products_From_Flask_API();
+
+    this.setState({ addfarmerNotice: `"${req.name}" added` })
 
   }
 
@@ -155,48 +170,65 @@ class App1 extends React.Component {
       return items.name.toLowerCase().includes(this.state.searchQuery.toLowerCase());
     })
     return (
-      <div>
-        <NavBar _onClick={this.handleSelectMenu} />
+      <ThemeContext.Consumer>{(context) => {
+        const { selectTheme, isLightTheme, light, dark, toggleLight_Dark } = context;
+        const currentTheme = isLightTheme ? light : dark;
+        return (
+          <div>
+            <NavBar _onClick={this.handleSelectMenu} />
 
-        <div id='_idHome' style={{ display: "block" }}>
-          <div className="container">
-            <div className="Main">
-              <FarmMap allfarmers={(filteredFarmers) ? filteredFarmers : this.state.farmersList} />
-              <div>
-                <FarmList search={this.handleProductSearch} searchQuery={this.state.searchQuery}
-                  allProducts={filteredProducts} />
+            <div id='_idHome' style={{ display: "block", background: currentTheme.bg }}>
+              <div className="container" style={{ background: currentTheme.ui, color: currentTheme.textColor }}>
+
+                <Settings toggleLight_Dark={toggleLight_Dark} selectTheme={selectTheme} background={currentTheme.ui}
+                  toggleServer={this.toggleServer}
+                />
+
+                <div className="Main">
+                  <FarmMap allfarmers={(filteredFarmers) ? filteredFarmers : this.state.farmersList} />
+                  <div>
+                    <FarmList search={this.handleProductSearch} searchQuery={this.state.searchQuery}
+                      allProducts={filteredProducts} cust_style={{ background: currentTheme.ui, color: currentTheme.textColor }} />
+                  </div>
+                </div>
+                <div className="result">
+                  <SearchResult allfarmers={filteredFarmers} cust_style={{ background: currentTheme.ui, color: currentTheme.textColor }} />
+                </div>
               </div>
             </div>
-            <div className="result">
-              <SearchResult allfarmers={filteredFarmers} />
+            <div id='_idAllFarmers' style={{ display: "none" }}>
+              <button onClick={this.showModal}>Add Farmer</button>
+              <Modal
+                show={this.state.show} handleClose={this.hideModal} handleAddFarmer={this.handleAddFarmer}>
+                <div >
+                  <h3 style={{ display: "flex", justifyContent: "center", padding: "5px" }}>{this.state.addfarmerNotice}</h3>
+                  <div style={{ display: "grid", gridTemplateColumns: "15% 40% 15% 15% 15%" }}>
+                    <input style={{ margin: "3px" }} type="text" onChange={(e) => this.handleAddFarmerDetails({ name: e.target.value })} placeholder="Enter Farm Name" />
+                    <input style={{ margin: "3px" }} type="text" onChange={(e) => this.handleAddFarmerDetails({ address: e.target.value })} placeholder="Enter Farm Address" />
+                    <input style={{ margin: "3px" }} type="text" onChange={(e) => this.handleAddFarmerDetails({ contact: e.target.value })} placeholder="Enter Farm Contact" />
+                    <input style={{ margin: "3px" }} type="text" onChange={(e) => this.handleAddFarmerDetails({ lat: e.target.value })} placeholder="Enter Farm Latitude" />
+                    <input style={{ margin: "3px" }} type="text" onChange={(e) => this.handleAddFarmerDetails({ long: e.target.value })} placeholder="Enter Farm Longitude" />
+                  </div>
+                </div>
+              </Modal>
+
+              <AllFarmers allFarmers={this.state.farmersList} refresh={this.get_all_Products_From_Flask_API}
+                cust_style={{ background: currentTheme.ui, color: currentTheme.textColor }}
+              />
             </div>
+            <div id='_idAllProducts' style={{ display: "none" }}>
+              <AllProducts allproducts={this.state.productList}
+                cust_style={{ background: currentTheme.ui, color: currentTheme.textColor }} />
+            </div>
+
           </div>
-        </div>
-        <div id='_idAllFarmers' style={{ display: "none" }}>
-          <button onClick={this.showModal}>Add Farmer</button>
-          <Modal show={this.state.show} handleClose={this.hideModal} handleAddFarmer={this.handleAddFarmer}>
-            <div >
-              <h3 style={{ display: "flex", justifyContent: "center", padding: "5px" }}>{this.state.addfarmerNotice}</h3>
-              <div style={{ display: "grid", gridTemplateColumns: "15% 40% 15% 15% 15%" }}>
-                <input style={{ margin: "3px" }} type="text" onChange={(e) => this.handleAddFarmerDetails({ name: e.target.value })} placeholder="Enter Farm Name" />
-                <input style={{ margin: "3px" }} type="text" onChange={(e) => this.handleAddFarmerDetails({ address: e.target.value })} placeholder="Enter Farm Address" />
-                <input style={{ margin: "3px" }} type="text" onChange={(e) => this.handleAddFarmerDetails({ contact: e.target.value })} placeholder="Enter Farm Contact" />
-                <input style={{ margin: "3px" }} type="text" onChange={(e) => this.handleAddFarmerDetails({ lat: e.target.value })} placeholder="Enter Farm Latitude" />
-                <input style={{ margin: "3px" }} type="text" onChange={(e) => this.handleAddFarmerDetails({ long: e.target.value })} placeholder="Enter Farm Longitude" />
-              </div>
-            </div>
-          </Modal>
-          <AllFarmers allFarmers={this.state.farmersList} />
-        </div>
-        <div id='_idAllProducts' style={{ display: "none" }}>
-          <AllProducts allproducts={this.state.productList} />
-        </div>
-      </div>
+        )
+      }}</ThemeContext.Consumer>
     );
   }
 }
 
-export default App1;
+export default App;
 
 const Modal = ({ handleClose, handleAddFarmer, show, children }) => {
   const showHideClassName = show ? "modal display-block" : "modal display-none";

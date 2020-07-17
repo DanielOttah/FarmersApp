@@ -8,7 +8,8 @@ class NavBar extends Component {
                 <ul id=''>
                     <li id='idHome' onClick={this.props._onClick}>Home</li>
                     <li id='idAllProducts' onClick={this.props._onClick}>All Products</li>
-                    <li id='idAllFarmers' onClick={this.props._onClick}>All Farmers</li></ul>
+                    <li id='idAllFarmers' onClick={this.props._onClick}>All Farmers</li>
+                </ul>
                 <img src={"/logo.png"} alt="logo" style={{ float: "right" }} />
             </div>
         );

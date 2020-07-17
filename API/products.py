@@ -12,13 +12,13 @@ class Food(Resource):
         rowCount = 0
         for row in cursor.execute("SELECT * FROM foodDetails"):
             rowCount += 1
-            food[rowCount] = buildDict(row).json()
+            food[rowCount] = buildFoodDict(row).json()
         connection.commit()
         connection.close()
         return food
 
 
-class buildDict():
+class buildFoodDict():
     def __init__(self, row):
         self.id = row[0]
         self.name = row[1]

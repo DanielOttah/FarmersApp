@@ -11,19 +11,21 @@ class AllProducts extends Component {
             <Farmers key={index.toString()} value={items} ind={index + 1} _onClick={this.getImage} />
         )
         return (
-            <table >
-                <tbody>
-                    <tr>
-                        <th>S/N</th>
-                        <th>Item Name</th>
-                        <th>Botanical Names</th>
-                        <th>Other Names</th>
-                        <th>Image</th>
+            <div style={this.props.cust_style}>
+                <table >
+                    <tbody>
+                        <tr>
+                            <th>S/N</th>
+                            <th>Item Name</th>
+                            <th>Botanical Names</th>
+                            <th>Other Names</th>
+                            <th>Image</th>
 
-                    </tr>
-                    {listItem}
-                </tbody>
-            </table>
+                        </tr>
+                        {listItem}
+                    </tbody>
+                </table>
+            </div>
         );
     }
 }

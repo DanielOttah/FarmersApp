@@ -11,6 +11,9 @@ flask = "*"
 flask-cors = "*"
 flask-restful = "*"
 pytest = "*"
+flask-sqlalchemy = "*"
+psycopg = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.8"

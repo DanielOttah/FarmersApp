@@ -6,15 +6,17 @@ class SearchResult extends Component {
             <SearchList key={index.toString()} value={items} />
         )
         return (
-            <table >
-                <tbody>
-                    <tr><th>Farm Name</th>
-                        <th>Farm Address</th>
-                        <th>Farm Contact</th>
-                    </tr>
-                    {listItem}
-                </tbody>
-            </table>
+            <div style={this.props.cust_style}>
+                <table >
+                    <tbody>
+                        <tr><th>Farm Name</th>
+                            <th>Farm Address</th>
+                            <th>Farm Contact</th>
+                        </tr>
+                        {listItem}
+                    </tbody>
+                </table>
+            </div>
         );
     }
 }

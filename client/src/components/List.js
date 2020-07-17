@@ -6,7 +6,7 @@ export class FarmList extends React.Component {
             <ProductList key={index.toString()} value={items} />)
 
         return (
-            <div className="List">
+            <div className="List" style={this.props.cust_style}>
                 <fieldset style={{ marginTop: "5px" }}>
                     <legend> <b>Products</b></legend>
                     <input type='search' placeholder="Search farms products..." value={this.props.searchQuery} onChange={this.props.search} />

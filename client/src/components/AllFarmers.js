@@ -7,7 +7,9 @@ class AllFarmers extends Component {
             show: false,
             farmerName: "",
             getFarmerInfo: "",
-            allFarmerProduct: []
+            allFarmerProduct: [],
+            showModalConfirmation: false,
+            deleteFarmerConfirm: false
         }
     }
     async postData(link = '', data = {}) {
@@ -32,12 +34,16 @@ class AllFarmers extends Component {
 
     get_farmer_Product = async (farm_name) => {
 
-        let resp = await this.postData('http://127.0.0.1:4000/farmer_product', { "name": farm_name });
+        //Flask Server
+        let resp = await this.postData('http://127.0.0.1:3500/farmer_product', { "name": farm_name });
+        // console.log(resp);
+
+        //Node Server
+        // let resp = await this.postData('http://127.0.0.1:4000/farmer_product', { "name": farm_name });
+
         this.setState({
             allFarmerProduct: resp
         })
-        // console.log(resp)
-
     }
 
     showModal = (e) => {
@@ -51,6 +57,27 @@ class AllFarmers extends Component {
     hideModal = () => {
         this.setState({ show: false });
     }
+    handleDeleteFarmer = () => {
+        this.setState({
+            showModalConfirmation: !this.state.showModalConfirmation,
+            deleteFarmerConfirm: false
+        })
+    }
+    handleModalConfirmation = async (e) => {
+        if (e.target.textContent === "No") {
+            this.setState({
+                showModalConfirmation: false
+            })
+        }
+        else if (e.target.textContent === "Yes") {
+            this.setState({
+                showModalConfirmation: false,
+                deleteFarmerConfirm: true
+            })
+            //Flask Server
+            this.postData('http://127.0.0.1:3500/del_farmer', { "name": this.state.farmerName });
+        }
+    }
 
     render() {
         const listItem = this.props.allFarmers.map((items, index) =>
@@ -60,8 +87,10 @@ class AllFarmers extends Component {
             <FarmProduct key={index.toString()} value={items} ind={index + 1} />
         )
         return (
-            <div>
-                <Modal show={this.state.show} handleClose={this.hideModal} >
+            <div style={this.props.cust_style}>
+
+                <Modal show={this.state.show} handleClose={this.hideModal} handleDeleteFarmer={this.handleDeleteFarmer} >
+                    <ModalConfirmation show={this.state.showModalConfirmation} farm={this.state.farmerName} onClick={this.handleModalConfirmation} />
                     <div>
                         <h3 style={{ display: "flex", justifyContent: "center", padding: "5px" }}>{this.state.farmerName}</h3>
                         <table >
@@ -108,18 +137,18 @@ function Farmers(props) {
 
 }
 
-const Modal = ({ handleClose, show, children }) => {
+const Modal = ({ handleClose, show, children, handleDeleteFarmer }) => {
     const showHideClassName = show ? "modal display-block" : "modal display-none";
 
     return (
-        <div className={showHideClassName} >
+        <div className={showHideClassName}>
 
             <section className="modal-main" style={{ height: "60vh", overflow: "auto" }}>
                 <button style={{ margin: "3px", padding: "5px" }} onClick={handleClose}>Close</button>
-                <button style={{ margin: "3px", padding: "5px" }} onClick={handleClose}>Delete Farmer</button>
+                <button style={{ margin: "3px", padding: "5px" }} onClick={handleDeleteFarmer}>Delete Farmer</button>
                 {children}
-                <button style={{ margin: "3px", padding: "5px" }} onClick={handleClose}>Delete Farmer</button>
                 <button style={{ margin: "3px", padding: "5px" }} onClick={handleClose}>Close</button>
+                <button style={{ margin: "3px", padding: "5px" }} onClick={handleDeleteFarmer}>Delete Farmer</button>
             </section>
         </div>
 
@@ -132,5 +161,27 @@ function FarmProduct(props) {
         <td >{props.value.name}</td>
         <td>{props.value.price}</td>
     </tr>
-
 }
+
+const ModalConfirmation = ({ onClick, show, farm }) => {
+    const showHideClassName = show ? "modal display-block" : "modal display-none";
+
+    return (
+        <div className={showHideClassName}>
+            <section className="modal-confirm">
+                <div className="center">
+                    <h3>Delete {farm}?</h3>
+                </div>
+                <div className="center">
+                    <p>Are you sure?</p>
+                </div>
+                <br />
+                <div className="center">
+                    <button style={{ margin: "5px", padding: "10px", cursor: 'pointer' }} onClick={onClick}>Yes</button>
+                    <button style={{ margin: "5px", padding: "10px", cursor: 'pointer' }} onClick={onClick}>No</button>
+                </div>
+            </section>
+        </div>
+
+    );
+};

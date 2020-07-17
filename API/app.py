@@ -18,7 +18,7 @@ def helloWorld():
     return "Welcome to Farmers' Alley App... Enjoy!"
 
 
-api.add_resource(Farmers, '/farmers')
+api.add_resource(Farmers, '/farmers', '/addfarmers')
 api.add_resource(Food, '/food')
 
 if __name__ == '__main__':
